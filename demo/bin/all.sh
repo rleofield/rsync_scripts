@@ -56,7 +56,6 @@ CONFFOLDER="${WORKINGDIR}/conf"
 
 
 
-
 for RSNAPSHOT_CFG in ${RSNAPSHOTS}
 do
 	RSNAPSHOT_CONFIG=rsnapshot_${RSNAPSHOT_CFG}.conf
@@ -170,12 +169,98 @@ do
 done
 
 
+#exit	
+
+#INTERVAL="daily"
+
+
+TODAY7=`date +%Y%m%d-%H%M`
+log ""
+log "first done"
+log "$TODAY7"
+log "===="
+if [ "$INTERVAL" != "daily" ]
+then
+	log "don't copy snapshot to extern disk, period is not daily"
+	if [ $testmode  = 0 ]
+	then
+		log 'finish'
+		exit
+	else
+		log 'finish, no exit, is testmode'
+	fi
+fi
+
+
+# compare with diff --no-dereference
+# diff --no-dereference -r /home/rleo/demo/rs/ /home/rleo/demo/rs2/
+
+
+log "copy snapshot to extern disk, period is 'daily'"
+
+RSNAPSHOTS="demotestdaten"
+
+
+# final copy
+ 
+SOURCE=/home/rleo/demo
+TARGET=/home/rleo/demo
+
+MARKER_SOURCE="${SOURCE}"
+MARKER_TARGET="${TARGET}"
+
+SOURCE=${SOURCE}/rs
+TARGET=${TARGET}/rs2
+
+if [ ! -d $MARKER_SOURCE ]
+then
+	log "source marker folder: '$MARKER_SOURCE' doesn't exist"
+        log "give up"
+   	exit
+fi
+if [ ! -d $MARKER_TARGET ]
+then
+	log "marker folder '$MARKER_TARGET' doesn't exist"
+        log "give up"
+        exit
+fi
+
+
+
+log ""
+log "--- start rsnapshot-copy $TODAY7 ---"
+ 
+for RSNAPSHOT1 in $RSNAPSHOTS
+do
+
+        TODAY_RSYNC_FINAL_START=`date +%Y%m%d-%H%M`
+        log "$TODAY_RSYNC_FINAL_START  start -- ./rsnapshot-copy' '$RSNAPSHOT1'"
+        log "./rsnapshot-copy -avSAX --delete  $SOURCE/$RSNAPSHOT1 $TARGET/$RSNAPSHOT1"
+
+        #./rsnapshot-copy -avSAX --delete  $SOURCE/$RSNAPSHOT1/ $TARGET/$RSNAPSHOT1/
+	#echo "rsync -avSAXH  $SOURCE/$L/ /media/red/rs2/rss/$L/ "
+
+	# use rsync directly, clearer as the script ./rsnapshot-copy
+	log "rsync -avSAXH  $SOURCE/$RSNAPSHOT1/ $TARGET/$RSNAPSHOT1/ --delete"
+	#rsync -avSAXH  $SOURCE/$RSNAPSHOT1/ $TARGET/$RSNAPSHOT1/ --delete
+
+        TODAY_RSYNC_FINAL_END=`date +%Y%m%d-%H%M`
+        log "$TODAY_RSYNC_FINAL_END  end   -- ./rsnapshot-copy '$RSNAPSHOT1'"
+
+done
+
+
+sync
+sleep 2
 
 
 TODAY=`date +%Y%m%d-%H%M`
 log "done"
 log "$TODAY"
 log "===="
+
+
+
 
 
 
