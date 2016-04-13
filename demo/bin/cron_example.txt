@@ -1,0 +1,36 @@
+# hourly   -> first, creates hourly 
+# creates monthly -> pulls latest weekly 
+# creates weekly  -> pulls latest daily
+# creates daily   -> pulls latest hourly
+
+# hourly   yearly    monthly    weekly    daily
+# 0:00  -> 1:03   -> 1:33    -> 2:11   -> 3:11
+# und 6x/day, every 4 hours = 0, 4, 8, 12, 16, 20
+# 
+
+#/home/rleo/bin/rsnapshot
+# 0, 4, 8, 12, 16, 20 = hourly = 6 times = */4,  every 4 hours
+# 0, 6, 12, 18        = hourly = 4 times = */6,  every 6 hours
+
+
+# Example retain values from demo
+# hier muss der folder hin, in dem all.sh steht
+# hourly
+3 */6   * * *           root    /home/wd/messen/CLT/CLT_2016/demo/demo/daily
+# monthly
+33 1    1 * *           root    /home/wd/messen/CLT/CLT_2016/demo/demo/monthly
+# weekly
+11 2    * * 1           root    /home/wd/messen/CLT/CLT_2016/demo/demo/weekly
+# daily
+11 3    * * *           root    /home/wd/messen/CLT/CLT_2016/demo/demo/daily
+
+
+# from
+# (http://linux.die.net/man/1/rsnapshot) 
+# It is usually a good idea to schedule the larger backup levels to run a bit before the lower ones. 
+# For example, in the crontab above, notice that "daily" runs 10 minutes before "hourly". The main 
+# reason for this is that the daily rotate will pull out the oldest hourly and make that the 
+# youngest daily (which means that the next hourly rotate will not need to delete the oldest hourly), 
+# which is more efficient. A secondary reason is that it is harder to predict how long the lowest 
+# backup level will take, since it needs to actually do an rsync of the source as well as the rotate that all backups do.
+
