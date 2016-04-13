@@ -238,11 +238,11 @@ do
         log "./rsnapshot-copy -avSAX --delete  $SOURCE/$RSNAPSHOT1 $TARGET/$RSNAPSHOT1"
 
         #./rsnapshot-copy -avSAX --delete  $SOURCE/$RSNAPSHOT1/ $TARGET/$RSNAPSHOT1/
-	#echo "rsync -avSAXH  $SOURCE/$L/ /media/red/rs2/rss/$L/ "
+	   #echo "rsync -avSAXH  $SOURCE/$L/ /media/red/rs2/rss/$L/ "
 
-	# use rsync directly, clearer as the script ./rsnapshot-copy
-	log "rsync -avSAXH  $SOURCE/$RSNAPSHOT1/ $TARGET/$RSNAPSHOT1/ --delete"
-	#rsync -avSAXH  $SOURCE/$RSNAPSHOT1/ $TARGET/$RSNAPSHOT1/ --delete
+	   # use rsync directly, clearer as the script ./rsnapshot-copy
+	   log "rsync -avSAXH  $SOURCE/$RSNAPSHOT1/ $TARGET/$RSNAPSHOT1/ --delete"
+	   rsync -avSAXH  $SOURCE/$RSNAPSHOT1/ $TARGET/$RSNAPSHOT1/ --delete
 
         TODAY_RSYNC_FINAL_END=`date +%Y%m%d-%H%M`
         log "$TODAY_RSYNC_FINAL_END  end   -- ./rsnapshot-copy '$RSNAPSHOT1'"
@@ -252,6 +252,9 @@ done
 
 sync
 sleep 2
+
+echo "diff --no-dereference -r /home/rleo/demo/rs/ /home/rleo/demo/rs2/"
+diff --no-dereference -r /home/rleo/demo/rs/ /home/rleo/demo/rs2/
 
 
 TODAY=`date +%Y%m%d-%H%M`
