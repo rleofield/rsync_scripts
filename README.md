@@ -1,2 +1,2 @@
 # rsync_scripts
-som scripts for using rsync
+some scripts for using rsync
